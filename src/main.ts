@@ -5,6 +5,7 @@ import { ResponseInterceptor } from './common/response.interceptor';
 import { AllExceptionsFilter } from './common/http-exception.filter';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
+import morgan  from 'morgan';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule); // ✅ cast here
@@ -26,7 +27,7 @@ async function bootstrap() {
   app.useGlobalInterceptors(new ResponseInterceptor());
   app.useGlobalFilters(new AllExceptionsFilter());
   // app.useGlobalGuards(new JwtAuthGuard(), new RolesGuard(new Reflector()));
-
+  app.use(morgan('combined')); 
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();

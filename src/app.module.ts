@@ -19,8 +19,8 @@ import { ChatService } from './chat/service/chat.service';
 import { ChatModule } from './chat/chat.module';
 import { NotificationService } from './modules/notification/services/notification.service';
 import { NotificationModule } from './modules/notification/notification.module';
-import { VehicleCategoryModule } from './vehicle-category/vehicle-category.module';
-import { VehicleModule } from './vehicle/vehicle.module';
+import { RiderTypeModule } from './modules/riderType/riderType.module';
+import { PaymentsModule } from './modules/payments/payments.module';
 
 @Module({
   imports: [
@@ -33,7 +33,7 @@ import { VehicleModule } from './vehicle/vehicle.module';
         uri: configService.get<string>('DB_URI', { infer: true }),
       }),
       inject: [ConfigService],
-    }), UserModule, AuthModule, PageModule, ChatModule, NotificationModule, VehicleCategoryModule, VehicleModule,
+    }), UserModule, AuthModule, PageModule, ChatModule, NotificationModule,RiderTypeModule, PaymentsModule,
   ],
   controllers: [AppController, UserController, AuthController, PageController,],
   providers: [AppService, UserService, JwtService, AuthService, EmailService, PageService, ChatService, NotificationService],
