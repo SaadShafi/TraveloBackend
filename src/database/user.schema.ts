@@ -85,6 +85,9 @@ export class User {
 
     @Prop({ required: false, default: null })
     vat_certificate: string;
+
+    @Prop({ required: false, default: null })
+    stripeCustomerId: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
