@@ -38,7 +38,7 @@ export class StripeService {
   async createDynamicWeeklySubscription(data: {
     customerId: string;
     amountInCents: number;
-  }): Promise<CreateSubscriptionResponse>{
+  }): Promise<CreateSubscriptionResponse> {
     let subscription = await this.stripe.subscriptions.create(
       {
         customer: data.customerId,
@@ -84,14 +84,18 @@ export class StripeService {
     };
   }
 
-   // Step 1: Create PaymentIntent for initial fee (manual capture)
-  async createRidePaymentIntent(riderStripeCustomerId: string, amount: number, currency = 'usd') {
+  // Step 1: Create PaymentIntent for initial fee (manual capture)
+  async createRidePaymentIntent(
+    riderStripeCustomerId: string,
+    amount: number,
+    currency = "usd"
+  ) {
     const paymentIntent = await this.stripe.paymentIntents.create({
       amount,
       currency,
       customer: riderStripeCustomerId, // optional
-      payment_method_types: ['card'],
-      capture_method: 'manual', // manual capture
+      payment_method_types: ["card"],
+      capture_method: "manual", // manual capture
     });
 
     return paymentIntent;
@@ -107,13 +111,23 @@ export class StripeService {
   }
 
   // Step 3: Capture the final payment
-  async captureRidePayment(paymentIntentId: string) {
-    const captured = await this.stripe.paymentIntents.capture(paymentIntentId);
-    return captured;
+  async captureRidePayment(
+    paymentIntentId: string,
+    options?: Stripe.PaymentIntentCaptureParams
+  ): Promise<Stripe.PaymentIntent> {
+    return this.stripe.paymentIntents.capture(paymentIntentId, {
+      ...options,
+      expand: ["charges"],
+    });
   }
 
   // Step 4: Pay the driver (Stripe Connect)
-  async payDriver(driverAccountId: string, amount: number, currency: string, chargeId: string) {
+  async payDriver(
+    driverAccountId: string,
+    amount: number,
+    currency: string,
+    chargeId: string
+  ) {
     const transfer = await this.stripe.transfers.create({
       amount,
       currency,
@@ -124,6 +138,3 @@ export class StripeService {
     return transfer;
   }
 }
-
-
-
